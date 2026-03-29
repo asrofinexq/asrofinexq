@@ -5,6 +5,7 @@ import "./globals.css";
 import "./nexq.css";
 import { InitialLoader } from "@/app/components/InitialLoader";
 import LayoutChrome from "@/app/components/LayoutChrome";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <InitialLoader />
         <LayoutChrome>{children}</LayoutChrome>
+        <Analytics />
       </body>
     </html>
   );
