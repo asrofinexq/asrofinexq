@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import AboutMythrillCards from "@/app/components/AboutMythrillCards";
 import RevealSection from "@/app/components/RevealSection";
 import PageSocialLinks from "@/app/components/PageSocialLinks";
 import {
@@ -20,23 +20,20 @@ import {
 export default function AboutPage() {
   return (
     <main className="page">
-      <RevealSection className="section section--about" delay={0.05} from="left">
+      <RevealSection
+        className="section section--about"
+        delay={0.05}
+        from="left"
+        blurReveal={false}
+      >
         <div className="section__header">
           <h1 className="section__title">About</h1>
           <span className="section__num">01 / 04</span>
         </div>
 
         <div className="about-hero">
-          <div className="about-hero__photo-wrap">
-            <Image
-              className="about-hero__photo"
-              src="/profilw.jpeg"
-              alt="Mohammad Asrofi"
-              width={280}
-              height={350}
-              sizes="(max-width: 720px) 220px, 280px"
-              priority
-            />
+          <div className="about-hero__cards-wrap">
+            <AboutMythrillCards />
           </div>
           <div className="about-hero__main">
             <p className="about-hero__kicker">IT Developer · Founder NexQuarter Digital Solution</p>

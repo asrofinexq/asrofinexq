@@ -345,28 +345,176 @@ body > * {
 
 .about-hero {
   display: grid;
-  grid-template-columns: minmax(200px, 252px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
   gap: clamp(24px, 4vw, 44px) clamp(28px, 5vw, 52px);
   align-items: start;
   margin-bottom: 0;
 }
 
-.about-hero__photo-wrap {
-  position: relative;
+.about-hero__cards-wrap {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
-.about-hero__photo {
-  width: 100%;
-  max-width: 252px;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  max-height: 320px;
-  border-radius: 18px;
+/* Mythrill-style cards (scoped; based on css-experiments demo) */
+.about-mythrill-cards {
+  --about-mythrill-card-height: 300px;
+  --about-mythrill-card-width: calc(var(--about-mythrill-card-height) / 1.5);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 0;
+  padding: 0;
+}
+
+.about-mythrill-cards,
+.about-mythrill-cards *,
+.about-mythrill-cards *::before,
+.about-mythrill-cards *::after {
+  box-sizing: border-box;
+}
+
+.about-mythrill-cards__wrap {
+  margin: 0 clamp(10px, 3vw, 50px);
+  display: flex;
+  justify-content: center;
+}
+
+.about-mythrill-card {
+  width: var(--about-mythrill-card-width);
+  height: var(--about-mythrill-card-height);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 36px;
+  perspective: 2500px;
+  isolation: isolate;
+  border-radius: 12px;
+  transition: box-shadow 0.5s ease;
+}
+
+.about-mythrill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.36);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.about-mythrill-card:hover::before {
+  opacity: 1;
+}
+
+.about-mythrill-card:hover {
+  box-shadow:
+    inset 22px 22px 36px -14px rgba(0, 0, 0, 0.42),
+    inset -22px 22px 36px -14px rgba(0, 0, 0, 0.42),
+    inset 22px -22px 36px -14px rgba(0, 0, 0, 0.42),
+    inset -22px -22px 36px -14px rgba(0, 0, 0, 0.42);
+}
+
+.about-mythrill-card__cover {
   object-fit: cover;
-  object-position: center top;
-  border: 0.5px solid var(--border);
+}
+
+.about-mythrill-card__wrapper {
+  transition: all 0.5s;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.about-mythrill-card:hover .about-mythrill-card__wrapper {
+  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+  box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+}
+
+.about-mythrill-card__wrapper::before,
+.about-mythrill-card__wrapper::after {
+  content: "";
+  opacity: 0;
+  width: 100%;
+  height: 80px;
+  transition: all 0.5s;
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+}
+
+.about-mythrill-card__wrapper::before {
+  top: 0;
+  height: 100%;
+  background-image: linear-gradient(
+    to top,
+    transparent 46%,
+    rgba(12, 13, 19, 0.5) 68%,
+    rgb(12, 13, 19) 97%
+  );
+}
+
+.about-mythrill-card__wrapper::after {
+  bottom: 0;
+  opacity: 1;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 46%,
+    rgba(12, 13, 19, 0.5) 68%,
+    rgb(12, 13, 19) 97%
+  );
+}
+
+.about-mythrill-card:hover .about-mythrill-card__wrapper::before,
+.about-mythrill-card__wrapper::after {
+  opacity: 1;
+}
+
+.about-mythrill-card:hover .about-mythrill-card__wrapper::after {
+  height: 120px;
+}
+
+.about-mythrill-card__title-img {
+  width: 100%;
+  height: auto;
+  max-height: 64px;
+  object-fit: contain;
+  object-position: center bottom;
   display: block;
-  background: var(--card-bg);
+  position: relative;
+  z-index: 3;
+  transition: transform 0.5s;
+}
+
+.about-mythrill-card:hover .about-mythrill-card__title-img {
+  transform: translate3d(0%, -50px, 100px);
+}
+
+.about-mythrill-card__character {
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
+  position: absolute;
+  z-index: -1;
+  display: block;
+  pointer-events: none;
+  transform-origin: center 92%;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.about-mythrill-card:hover .about-mythrill-card__character {
+  opacity: 1;
+  z-index: 2;
+  transform: translate3d(0%, -24%, 130px) scale(1.39);
 }
 
 .about-hero__main {
@@ -2195,9 +2343,11 @@ body > * {
     grid-template-columns: 1fr;
     justify-items: center;
   }
-  .about-hero__photo {
-    max-width: 240px;
+
+  .about-mythrill-cards {
+    --about-mythrill-card-height: 240px;
   }
+
   .about-hero__main {
     width: 100%;
     align-items: center;

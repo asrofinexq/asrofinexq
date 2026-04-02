@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion/react";
-import ProfileCard from "@/app/components/ProfileCard";
+import AboutMythrillCards from "@/app/components/AboutMythrillCards";
 import LogoLoop, { type LogoItem } from "@/app/components/LogoLoop";
 import VisitorComments from "@/app/components/VisitorComments";
 import ShowcaseAction from "@/app/components/ShowcaseAction";
@@ -724,16 +724,20 @@ export function HomeAboutBlock({
   const [aboutModal, setAboutModal] = useState<"experience" | "academy" | null>(null);
   const closeAboutModal = () => setAboutModal(null);
   const revealEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
-  const stagedReveal = (delay = 0) =>
+  const stagedReveal = (delay = 0, opts?: { noBlur?: boolean }) =>
     introFromHero
       ? {
-          initial: { opacity: 0, y: 16, filter: "blur(10px)" },
-          animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+          initial: {
+            opacity: 0,
+            y: 16,
+            filter: opts?.noBlur ? "none" : "blur(10px)",
+          },
+          animate: { opacity: 1, y: 0, filter: "none" },
           transition: { delay, duration: 0.44, ease: revealEase },
         }
       : {
           initial: false as const,
-          animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+          animate: { opacity: 1, y: 0, filter: "none" },
         };
 
   useEffect(() => {
@@ -765,22 +769,14 @@ export function HomeAboutBlock({
           </motion.div>
 
           <div className="about-hero">
-            <motion.div className="about-hero__photo-wrap" {...stagedReveal(0.18)}>
-              <Image
-                className="about-hero__photo"
-                src="/profilw.jpeg"
-                alt="Mohammad Asrofi"
-                width={280}
-                height={350}
-                sizes="(max-width: 720px) 220px, 280px"
-                priority
-              />
+            <motion.div className="about-hero__cards-wrap" {...stagedReveal(0.18, { noBlur: true })}>
+              <AboutMythrillCards />
             </motion.div>
             <div className="about-hero__main">
-              <motion.p className="about-hero__kicker" {...stagedReveal(0.3)}>
+              <motion.p className="about-hero__kicker" {...stagedReveal(0.28)}>
                 IT Developer · Founder NexQuarter Digital Solution
               </motion.p>
-              <motion.div className="about-hero__name-row" {...stagedReveal(0.4)}>
+              <motion.div className="about-hero__name-row" {...stagedReveal(0.38)}>
                 <h2 className="about-hero__name">Mohammad Asrofi</h2>
                 <div className="about-modal-launchers" aria-label="Detail profil lanjutan">
                   <button type="button" className="btn btn--primary" onClick={() => setAboutModal("experience")}>
@@ -791,7 +787,7 @@ export function HomeAboutBlock({
                   </button>
                 </div>
             </motion.div>
-              <motion.ul className="about-hero__meta" aria-label="Kontak" {...stagedReveal(0.5)}>
+              <motion.ul className="about-hero__meta" aria-label="Kontak" {...stagedReveal(0.48)}>
                 <li>
                   <span className="about-hero__meta-label">Alamat</span>
                   <span>{SITE_ADDRESS}</span>
@@ -817,7 +813,7 @@ export function HomeAboutBlock({
                   </a>
                 </li>
               </motion.ul>
-              <motion.div className="about-hero__social-row" {...stagedReveal(0.58)}>
+              <motion.div className="about-hero__social-row" {...stagedReveal(0.56)}>
                 <span className="about-hero__social-label">Sosial</span>
                 <PageSocialLinks />
               </motion.div>
