@@ -147,6 +147,16 @@ export default function Home() {
   ] as const;
   const isProjectsStoryStep = storyStep === 3;
   const lockStorySectionScroll = !storyComplete;
+  /** Tur layar penuh: di desktop scroll section dikunci; di mobile isi step boleh di-scroll vertikal. */
+  const [storyTourMobileLayout, setStoryTourMobileLayout] = useState(false);
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 900px)");
+    const sync = () => setStoryTourMobileLayout(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     const markReady = () => setIntroReady(true);
@@ -2951,6 +2961,13 @@ export default function Home() {
             left: 8px;
             width: 54px;
           }
+          /* Story tour: izinkan scroll vertikal per-step (About, Services, dll.) */
+          .home-story__panel--scroll-locked {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
+          }
         }
       `}</style>
 
@@ -3081,7 +3098,11 @@ export default function Home() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                style={lockStorySectionScroll && !isProjectsStoryStep ? { touchAction: "none" } : undefined}
+                style={
+                  !storyTourMobileLayout && lockStorySectionScroll && !isProjectsStoryStep
+                    ? { touchAction: "none" }
+                    : undefined
+                }
               >
                 {storyStep === 0 ? renderHeroSection() : null}
                 {storyStep === 1 ? (
